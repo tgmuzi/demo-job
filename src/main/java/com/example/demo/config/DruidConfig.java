@@ -6,6 +6,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
+import com.example.demo.utils.DruidProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,11 +129,15 @@ public class DruidConfig {
         return datasource;
     }
 
+
     @Bean
-    public ServletRegistrationBean druidServlet() {
+    public ServletRegistrationBean druidServlet(DruidProperties druidProperties) {
         ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
         servletRegistrationBean.setServlet(new StatViewServlet());
         servletRegistrationBean.addUrlMappings("/druid/*");
+        servletRegistrationBean.addInitParameter("resetEnable",druidProperties.getResetEnable());
+        servletRegistrationBean.addInitParameter("loginUsername",druidProperties.getLoginUsername());
+        servletRegistrationBean.addInitParameter("loginPassword",druidProperties.getLoginPassword());
         return servletRegistrationBean;
     }
 
