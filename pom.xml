@@ -3,19 +3,68 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.example.job</groupId>
+	<groupId>com.example.demo</groupId>
 	<artifactId>demo-job</artifactId>
 	<version>0.0.1</version>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.15.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.example.demo</groupId>
+		<artifactId>demo-parent</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../demo-parent</relativePath>
 	</parent>
 	<properties>
+		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
 		<java.version>1.8</java.version>
 	</properties>
+
+	<!--consul配置-->
+	<dependencyManagement>
+		<dependencies>
+			<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<!--end  consul配置-->
 	<dependencies>
+		<dependency>
+			<groupId>com.example.demo</groupId>
+			<artifactId>demo-service</artifactId>
+			<version>0.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.solr</groupId>
+					<artifactId>solr-solrj</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--consul配置-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-all</artifactId>
+			<version>2.1.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+			<version>2.1.0.RELEASE</version>
+		</dependency>
+		<!--end  consul配置-->
 	</dependencies>
 
 	<build>
@@ -23,6 +72,53 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>install</id>
+						<phase>install</phase>
+						<configuration>
+							<target>
+								<echo message="*******************install*******************" />
+								<mkdir dir="${basedir}/target/classes" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>clean</id>
+						<phase>clean</phase>
+						<configuration>
+							<target>
+								<echo message="*******************clean*******************" />
+								<delete dir="target" />
+								<mkdir dir="${basedir}/target/classes" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

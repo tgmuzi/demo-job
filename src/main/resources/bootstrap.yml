@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: demo-job
+  cloud: #开始consul配置 文件名称 bootstrap.yml
+    consul:
+      host: 192.168.5.137
+      port: 8500
+      token: 5ae5ec2e-e520-b98f-023c-81a25a02b30c
+      config:
+        enabled: true #enabled将此值设置为“false”将禁用Consul配置
+        format: FILES
+        prefix: lottery-config/${spring.application.name}/${spring.profiles.tenant}
+        watch:
+          enabled: true
+      discovery:
+        enabled: true
+        tags: chineseName=${spring.profiles.tenant}接口工程, shortcut=job,management.context-path=${management.endpoints.web.base-path}
+        healthCheckPath: /demo-job-health-check
+        healthCheckInterval: 10s
+        #集群环境下保证唯一的instanceId
+        instanceId: ${spring.application.name}:${spring.profiles.tenant}:${spring.cloud.client.ip-address}:${server.port}
+        serviceName: demo-job-${spring.profiles.tenant}
+        #强制以获取ip的方式注册到consul
+        prefer-ip-address: true
+        #结束consul配置
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  profiles:
+    tenant: local
+    active: test
+
+server:
+  port: 9898
+  tomcat:
+    uri-encoding: UTF-8
+    #最大工作线程数，默认200,
+    max-threads: 15000
+    #等待队列长度，默认100
+    accept-count: 5000
+    #最大连接数（指在同一时间，tomcat能够接受的最大连接数。对于Java的阻塞式BIO，默认值是maxthreads的值；如果在BIO模式使用定制的Executor执行器，默认值将是执行器中maxthreads的值。对于Java 新的NIO模式，maxConnections 默认值是10000）
+    max-connections: 20000
+    #最小工作空闲线程数，默认10, 适当增大一些，以便应对突然增长的访问量
+    min-spare-threads: 100
+adminPath: /a
