@@ -1,8 +1,8 @@
 package com.example.demo.modules.oAuth;
 
 import com.alibaba.druid.util.StringUtils;
-import com.example.demo.modules.user.entity.SysUser;
-import com.example.demo.modules.user.entity.SysUserToken;
+import com.example.demo.modules.entity.user.entity.SysUser;
+import com.example.demo.modules.entity.user.entity.SysUserToken;
 import com.example.demo.service.modules.user.service.LoginService;
 import com.example.demo.service.modules.user.service.ShiroService;
 import com.example.demo.utils.oAuth.OAuth2Token;

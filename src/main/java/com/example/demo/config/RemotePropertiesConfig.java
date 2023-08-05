@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.modules.user.entity.SysUser;
+import com.example.demo.modules.entity.user.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

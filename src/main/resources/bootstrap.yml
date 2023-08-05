@@ -3,7 +3,7 @@ spring:
     name: demo-job
   cloud: #开始consul配置 文件名称 bootstrap.yml
     consul:
-      host: 192.168.5.137
+      host: localhost
       port: 8500
       token: 5ae5ec2e-e520-b98f-023c-81a25a02b30c
       config:
